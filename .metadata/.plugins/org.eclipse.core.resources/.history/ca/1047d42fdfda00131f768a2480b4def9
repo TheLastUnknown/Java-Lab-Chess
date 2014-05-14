@@ -1,0 +1,22 @@
+package module1;
+
+import java.io.IOException;
+
+public class Driver 
+{
+	public static Reader read = new Reader();
+	
+	public static void main(String args) 
+	{
+		try 
+		{
+			System.out.println("Please enter the file name you wish to read into the program");
+			read.readFile(args);
+		} 
+		catch (IOException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

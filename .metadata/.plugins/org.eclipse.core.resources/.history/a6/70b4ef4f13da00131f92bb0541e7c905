@@ -1,0 +1,56 @@
+package module1;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.*;
+
+public class Reader 
+{
+	public Map<Character,String> map = new HashMap<Character,String>();
+	
+	public void readFile()
+	{
+		
+	}
+	
+	public void testStrings()
+	{
+		setupMap();
+		Pattern pieceFinder = Pattern.compile("[KQBNRP][l|d]..");
+		String KingPiece = "Kla8";
+		Matcher m = pieceFinder.matcher(KingPiece);
+		boolean b = m.matches();
+		if(b)
+		{
+			System.out.println("Matched");
+			char type = KingPiece.charAt(0);
+			System.out.println(map.get(type));
+		}
+		else
+		{
+			System.out.println();
+		}
+	}
+	
+	public String printPiece()
+	{
+		return "";
+	}
+	
+	public String printSpace()
+	{
+		return "";
+	}
+	
+	public void setupMap()
+	{
+		map.put('K', "King");
+		map.put('Q', "Queen");
+		map.put('B', "Bishop");
+		map.put('N', "Knight");
+		map.put('R', "Rook");
+		map.put('P', "Pawn");
+		map.put('l', "white");
+		map.put('d', "black");
+	}
+}

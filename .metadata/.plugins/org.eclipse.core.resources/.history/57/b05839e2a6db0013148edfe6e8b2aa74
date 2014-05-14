@@ -1,0 +1,14 @@
+package Board;
+
+public class BoardSpace 
+{
+	public int row;
+	public char column;
+	
+	public enum spaceColor
+	{
+		WHITE,
+		BLACK
+	}
+
+}

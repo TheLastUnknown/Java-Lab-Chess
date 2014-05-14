@@ -1,0 +1,115 @@
+package module1;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.*;
+
+public class Reader 
+{
+	public Map<Character,String> map = new HashMap<Character,String>();
+	public String newLine = System.getProperty("line.separator");
+	public String pieceFinder = "[KQBNRP][l|d][a-hA-h][1-8]";
+	public String moveFinder = "[a-h][1-8] [a-h][1-8]\\*?";
+	
+	public void readFile(String FileName) throws IOException
+	{
+		setupMap();
+		try 
+		{
+			FileReader input = new FileReader(FileName);
+			BufferedReader reader = new BufferedReader(input);
+			
+			String line = "";
+			while(reader.ready())
+			{
+				line = reader.readLine();
+				String[] split = line.split(newLine);
+				for(String s : split)
+				{
+					System.out.println(piecePlace(s));
+				}
+			}
+			input.close();
+			reader.close();
+		} 
+		catch (FileNotFoundException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public String piecePlace(String piece)
+	{
+		
+		if(Pattern.matches(pieceFinder, piece))
+		{
+			System.out.println("Piece Placed");
+			return matchesPieceMoved(piece);
+		}
+		else if(Pattern.matches(moveFinder, piece))
+		{
+			System.out.println("Piece Moved");
+			return matchesPiecePlaced(piece);
+		}
+		else
+		{
+			return "Not a valid input";
+		}
+		
+	}
+	
+	public String showPiece(String type,String color)
+	{
+		String chessPiece = color + " " + type;
+		return chessPiece;
+	}
+	
+	public String showSpace(String spot)
+	{
+		return spot.toUpperCase();
+	}
+	
+	public String matchesPiecePlaced(String piece)
+	{
+		char type = piece.charAt(0);
+		char color = piece.charAt(1);
+		String spacePlacement = "place " + showPiece(map.get(type),map.get(color)) + " on " + showSpace(piece.substring(2, 4));
+		return spacePlacement;
+	}
+	
+	public String matchesPieceMoved(String spaces)
+	{
+		String moveResult ="";
+		
+		String spaceOne = spaces.substring(0,2);
+		String spaceTwo = showSpace(spaces.substring(3, 4));
+		
+		if(Pattern.matches("[a-h][1-8] [a-h][1-8]", spaces))
+		{
+			moveResult = showSpace(spaceOne + " moves to " + spaceTwo);
+		}
+		else if(Pattern.matches("[a-h][1-8] [a-h][1-8]\\*", spaces))
+		{
+			moveResult = showSpace(spaceOne + " moves to " + spaceTwo + " and captures the piece at " + spaceTwo);	
+		}
+		
+		return moveResult;
+	}
+	
+	public void setupMap()
+	{
+		map.put('K', "King");
+		map.put('Q', "Queen");
+		map.put('B', "Bishop");
+		map.put('N', "Knight");
+		map.put('R', "Rook");
+		map.put('P', "Pawn");
+		map.put('l', "white");
+		map.put('d', "black");
+	}
+}

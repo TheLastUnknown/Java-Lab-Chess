@@ -1,0 +1,85 @@
+package module1;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.*;
+
+public class Reader 
+{
+	public Map<Character,String> map = new HashMap<Character,String>();
+	public String newLine = System.getProperty("line.separator");
+	
+	public void readFile(String FileName) throws IOException
+	{
+		try 
+		{
+			FileReader input = new FileReader(FileName);
+			BufferedReader reader = new BufferedReader(input);
+			
+			String line = "";
+			while(reader.ready())
+			{
+				line = reader.readLine();
+				String[] split = line.split(newLine);
+				for(String s : split)
+				{
+					System.out.println(testStrings(s));
+				}
+			}
+			input.close();
+			reader.close();
+		} 
+		catch (FileNotFoundException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public String testStrings(String piece)
+	{
+		setupMap();
+		Pattern pieceFinder = Pattern.compile("[KQBNRP][l|d]..");
+		Matcher m = pieceFinder.matcher(piece);
+		boolean b = m.matches();
+		if(b)
+		{
+			//System.out.println("Matched");
+			char type = piece.charAt(0);
+			char color = piece.charAt(1);
+			String spacePlacement = "place " + showPiece(map.get(type),map.get(color)) + " on " + showSpace(piece.substring(2, 4));
+			return spacePlacement;
+		}
+		else
+		{
+			return "No match";
+		}
+	}
+	
+	public String showPiece(String type,String color)
+	{
+		String chessPiece = color + " " + type;
+		return chessPiece;
+	}
+	
+	public String showSpace(String spot)
+	{
+		return spot.toUpperCase();
+	}
+	
+	public void setupMap()
+	{
+		map.put('K', "King");
+		map.put('Q', "Queen");
+		map.put('B', "Bishop");
+		map.put('N', "Knight");
+		map.put('R', "Rook");
+		map.put('P', "Pawn");
+		map.put('l', "white");
+		map.put('d', "black");
+	}
+}
